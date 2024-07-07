@@ -104,7 +104,26 @@ def calculate_stock_data(data):
     
     return new_stock_data
 
-    
+def get_stock_values(data):
+    """
+    A function which takes the new stock data and heading of
+    sandwich type and returns this as a dictionary, this dictionary
+    is a guide for the next days stock
+    """
+    headings = SHEET.worksheet('sales').row_values(1)
+    stock_vals_dict = {}
+    for heading, value in zip(headings, data):
+        stock_vals_dict[heading] = value
+    return stock_vals_dict
+
+def next_days_prep_guide(data):
+    """
+    A function which takes the dictionary of the next days stock and
+    prints instructions to the terminal of what to create
+    """
+    for heading, stock in data.items():
+        print(f'Please make {stock} {heading} sandwiches today')
+
 
 def main():
     """
@@ -118,7 +137,9 @@ def main():
     sales_columns = get_last_5_entries_sales()
     stock_data = calculate_stock_data(sales_columns)
     update_worksheet(stock_data, 'stock')
+    stock_values = get_stock_values(stock_data)
+    next_days_prep_guide(stock_values)
+    
 
 print('Welcome to Love Sandwiches Data Automation')
 main()
-
